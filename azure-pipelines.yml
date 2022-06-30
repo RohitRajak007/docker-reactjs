@@ -19,7 +19,7 @@ parameters:
 - name: targetRepo
  displayName: Target Repo to push to
  type: string
- default: 'k-docker'
+ default: 'docker'
  
 variables:
  prodName: ${{ parameters.prodName }}
@@ -33,15 +33,15 @@ steps:
    - task: ArtifactoryToolsInstaller@1
      displayName: 'Install Build deps'
      inputs:
-       artifactoryService: 'kayal-art'
+       artifactoryService: 'artifactory-poc'
        cliInstallationRepo: 'cli' 
  
    - task: ArtifactoryDocker@1
      displayName: 'Pull Image'
      inputs:
        command: 'pull'
-       artifactoryService: 'kayal-art'
-       sourceRepo: 'k-docker'
+       artifactoryService: 'artifactory-poc'
+       sourceRepo: 'docker'
        imageName: '$(imageNameBase)'
  
    - task: Docker@2
@@ -59,8 +59,8 @@ steps:
      displayName: 'Push Image'
      inputs:
        command: 'push'
-       artifactoryService: 'kayal-art'
-       targetRepo: 'k-docker'
+       artifactoryService: 'artifactory-poc'
+       targetRepo: 'docker'
        imageName: '$(imageNameTb):$(Build.BuildNumber)'
        collectBuildInfo: true
        buildName: '$(Build.DefinitionName)'
@@ -70,6 +70,6 @@ steps:
    - task: ArtifactoryPublishBuildInfo@1
      displayName: 'Publish Build Info'
      inputs:
-       artifactoryService: 'kayal-art'
+       artifactoryService: 'artifactory-poc'
        buildName: '$(Build.DefinitionName)'
        buildNumber: '$(Build.BuildNumber)'

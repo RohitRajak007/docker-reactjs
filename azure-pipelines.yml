@@ -1,0 +1,75 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+pool:
+ vmImage: ubuntu-latest
+parameters:
+- name: prodName
+ displayName: Product to Build
+ type: string
+ default: 'nginx'
+- name: registry
+ displayName: Registry Hostname
+ type: string
+ default: test.jfrog.io'
+- name: targetRepo
+ displayName: Target Repo to push to
+ type: string
+ default: 'k-docker'
+ 
+variables:
+ prodName: ${{ parameters.prodName }}
+ registry: ${{ parameters.registry }}
+ targetRepo: ${{ parameters.targetRepo }}
+ buildContext: 'test-$(prodName)'
+ imageNameTb: '$(registry)/$(targetRepo)/test-$(prodName)'
+ imageNameBase: '$(registry)/$(targetRepo)/$(prodName)'
+ 
+steps:
+   - task: ArtifactoryToolsInstaller@1
+     displayName: 'Install Build deps'
+     inputs:
+       artifactoryService: 'kayal-art'
+       cliInstallationRepo: 'cli' 
+ 
+   - task: ArtifactoryDocker@1
+     displayName: 'Pull Image'
+     inputs:
+       command: 'pull'
+       artifactoryService: 'kayal-art'
+       sourceRepo: 'k-docker'
+       imageName: '$(imageNameBase)'
+ 
+   - task: Docker@2
+     displayName: 'Build Image'
+     inputs:
+       containerRegistry: 'ArtDocker'
+       repository: '$(targetRepo)/$(buildContext)'
+       command: 'build'
+       Dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+       arguments: '--build-arg BASEIMAGE=$(imageNameBase)'
+       tags: |
+         $(Build.BuildNumber)
+  
+   - task: ArtifactoryDocker@1
+     displayName: 'Push Image'
+     inputs:
+       command: 'push'
+       artifactoryService: 'kayal-art'
+       targetRepo: 'k-docker'
+       imageName: '$(imageNameTb):$(Build.BuildNumber)'
+       collectBuildInfo: true
+       buildName: '$(Build.DefinitionName)'
+       buildNumber: '$(Build.BuildNumber)'
+       includeEnvVars: true
+ 
+   - task: ArtifactoryPublishBuildInfo@1
+     displayName: 'Publish Build Info'
+     inputs:
+       artifactoryService: 'kayal-art'
+       buildName: '$(Build.DefinitionName)'
+       buildNumber: '$(Build.BuildNumber)'

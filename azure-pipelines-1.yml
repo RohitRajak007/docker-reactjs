@@ -24,8 +24,8 @@ stages:
       - task: ArtifactoryToolsInstaller@1
         displayName: 'Install Build deps'
         inputs:
-         artifactoryService: 'jfrog'
-         cliInstallationRepo: 'cli' 
+          artifactoryService: 'jfrog'
+          cliInstallationRepo: 'vodapoc-docker'
      
       - task: Docker@2
         displayName: 'Build Image'

@@ -27,3 +27,13 @@ stages:
         dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
         tags: |
           $(tag)
+          - task: ArtifactoryDocker@1
+            inputs:
+              command: 'push'
+              artifactoryService: 'jfrog'
+              targetRepo: 'vodapoc-docker'
+              imageName: 'reactjs app'
+              collectBuildInfo: true
+              buildName: '$(Build.DefinitionName)'
+              buildNumber: '$(Build.BuildNumber)'
+              includeEnvVars: true

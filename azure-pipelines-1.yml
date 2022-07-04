@@ -25,7 +25,9 @@ stages:
         displayName: 'Install Build deps'
         inputs:
           artifactoryService: 'jfrog'
-          cliInstallationRepo: 'default-maven-remote'
+          cliInstallationRepo: 'cliv2'
+          installExtractors: true
+          extractorsInstallationRepo: 'default-maven-remote'
      
       - task: Docker@2
         displayName: 'Build Image'

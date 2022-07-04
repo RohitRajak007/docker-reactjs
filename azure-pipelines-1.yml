@@ -25,12 +25,12 @@ stages:
       - task: Docker@2
         displayName: 'Build Image'
         inputs:
-         containerRegistry: 'registry'
-         repository: '$(targetRepo)/$(buildContext)'
-         command: 'build'
-         Dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-         tags: '$(Build.BuildNumber)'
-         arguments: '--build-arg BASEIMAGE=$(imageNameBase)'
+          containerRegistry: 'registry'
+          repository: '$(targetRepo)/$(buildContext)'
+          command: 'build'
+          Dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+          tags: '$(Build.BuildNumber)'
+          arguments: '--build-arg BASEIMAGE=$(imageNameBase)'
     
       - task: ArtifactoryDocker@1
         inputs:

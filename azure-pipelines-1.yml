@@ -25,8 +25,7 @@ stages:
       - task: Docker@2
         displayName: 'Build Image'
         inputs:
-          containerRegistry: 'registry'
-          repository: '$(targetRepo)/$(buildContext)'
+
           command: 'build'
           Dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
           tags: '$(Build.BuildNumber)'

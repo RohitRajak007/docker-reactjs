@@ -21,13 +21,6 @@ stages:
       vmImage: ubuntu-latest
     
     steps:
-      - task: ArtifactoryToolsInstaller@1
-        displayName: 'Install Build deps'
-        inputs:
-          artifactoryService: 'jfrog'
-          cliInstallationRepo: 'default-maven-remote'
-          installExtractors: true
-          extractorsInstallationRepo: 'default-maven-remote'
      
       - task: Docker@2
         displayName: 'Build Image'

@@ -35,7 +35,7 @@ stages:
           command: 'push'
           artifactoryService: 'jfrog'
           targetRepo: 'vodapoc-docker'
-          imageName: '$(imageNameTb):$(Build.BuildNumber)'
+          imageName: '$(imageName):$(Build.BuildNumber)'
           collectBuildInfo: true
           buildName: '$(Build.DefinitionName)'
           buildNumber: '$(Build.BuildNumber)'

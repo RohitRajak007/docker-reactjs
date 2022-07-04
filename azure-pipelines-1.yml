@@ -21,19 +21,31 @@ stages:
       vmImage: ubuntu-latest
     steps:
     - task: Docker@2
-      displayName: Build an image
+      displayName: 'Build Image'
       inputs:
-        command: build
-        dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-        tags: |
-          $(tag)
+       containerRegistry: 'ArtDocker'
+       repository: '$(targetRepo)/$(buildContext)'
+       command: 'build'
+       Dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+       arguments: '--build-arg BASEIMAGE=$(imageNameBase)'
+       tags: |
+         $(Build.BuildNumber)
+    
     - task: ArtifactoryDocker@1
-            inputs:
+      inputs:
               command: 'push'
               artifactoryService: 'jfrog'
               targetRepo: 'vodapoc-docker'
-              imageName: 'reactjs app'
+              imageName: '$(imageNameTb):$(Build.BuildNumber)'
               collectBuildInfo: true
               buildName: '$(Build.DefinitionName)'
               buildNumber: '$(Build.BuildNumber)'
               includeEnvVars: true
+
+    - task: ArtifactoryPublishBuildInfo@1
+      displayName: 'Publish Build Info'
+      inputs:
+       artifactoryService: 'vodapoc-docker'
+       buildName: '$(Build.DefinitionName)'
+       buildNumber: '$(Build.BuildNumber)'
+

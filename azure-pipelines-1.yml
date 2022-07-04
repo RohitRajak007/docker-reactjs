@@ -25,9 +25,7 @@ stages:
         displayName: 'Install Build deps'
         inputs:
           artifactoryService: 'jfrog'
-          cliInstallationRepo: 'cliv2'
-          installCustomVersion: true
-          cliVersion: '$(jfrogCliVersion)'
+          cliInstallationRepo: 'default-maven-remote'
           installExtractors: true
           extractorsInstallationRepo: 'default-maven-remote'
      

@@ -27,7 +27,7 @@ stages:
         dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
         tags: |
           $(tag)
-          - task: ArtifactoryDocker@1
+    - task: ArtifactoryDocker@1
             inputs:
               command: 'push'
               artifactoryService: 'jfrog'

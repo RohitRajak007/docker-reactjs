@@ -23,29 +23,28 @@ stages:
     - task: Docker@2
       displayName: 'Build Image'
       inputs:
-       containerRegistry: 'ArtDocker'
-       repository: '$(targetRepo)/$(buildContext)'
-       command: 'build'
-       Dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-       arguments: '--build-arg BASEIMAGE=$(imageNameBase)'
-       tags: |
-         $(Build.BuildNumber)
+        containerRegistry: 'registry'
+        repository: '$(targetRepo)/$(buildContext)'
+        command: 'build'
+        Dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+        tags: '$(Build.BuildNumber)'
+        arguments: '--build-arg BASEIMAGE=$(imageNameBase)'
     
     - task: ArtifactoryDocker@1
       inputs:
-              command: 'push'
-              artifactoryService: 'jfrog'
-              targetRepo: 'vodapoc-docker'
-              imageName: '$(imageNameTb):$(Build.BuildNumber)'
-              collectBuildInfo: true
-              buildName: '$(Build.DefinitionName)'
-              buildNumber: '$(Build.BuildNumber)'
-              includeEnvVars: true
+        command: 'push'
+        artifactoryService: 'jfrog'
+        targetRepo: 'vodapoc-docker'
+        imageName: '$(imageNameTb):$(Build.BuildNumber)'
+        collectBuildInfo: true
+        buildName: '$(Build.DefinitionName)'
+        buildNumber: '$(Build.BuildNumber)'
+        includeEnvVars: true
 
     - task: ArtifactoryPublishBuildInfo@1
       displayName: 'Publish Build Info'
       inputs:
-       artifactoryService: 'vodapoc-docker'
-       buildName: '$(Build.DefinitionName)'
-       buildNumber: '$(Build.BuildNumber)'
+        artifactoryService: 'vodapoc-docker'
+        buildName: '$(Build.DefinitionName)'
+        buildNumber: '$(Build.BuildNumber)'
 

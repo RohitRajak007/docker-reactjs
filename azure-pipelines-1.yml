@@ -38,7 +38,7 @@ stages:
           artifactoryService: '$(artifactoryServiceConnection)'
           targetRepo: '$(targetRepo)'
           tags: '$(Build.BuildNumber)'
-          imageName: '$(imageName):$(Build.BuildNumber)'
+          imageName: '$(imageName):$(imageTag)'
           collectBuildInfo: true
           buildName: '$(Build.DefinitionName)'
           buildNumber: '$(Build.BuildNumber)'

@@ -25,6 +25,8 @@ stages:
       - task: Docker@2
         displayName: 'Build Image'
         inputs:
+          containerRegistry: '$(dockerRegistryServiceConnection)'
+          repository: '$(imageRepository)'
           command: 'build'
           Dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
           tags: '$(Build.BuildNumber)'
@@ -33,8 +35,8 @@ stages:
       - task: ArtifactoryDocker@1
         inputs:
           command: 'push'
-          artifactoryService: 'jfrog'
-          targetRepo: 'vodapoc-docker'
+          artifactoryService: '$(artifactoryServiceConnection)'
+          targetRepo: '$(targetRepo)'
           tags: '$(Build.BuildNumber)'
           imageName: '$(imageName):$(Build.BuildNumber)'
           collectBuildInfo: true
@@ -45,7 +47,7 @@ stages:
       - task: ArtifactoryPublishBuildInfo@1
         displayName: 'Publish Build Info'
         inputs:
-          artifactoryService: 'jfrog'
+          artifactoryService: '$(artifactoryServiceConnection)'
           buildName: '$(Build.DefinitionName)'
           buildNumber: '$(Build.BuildNumber)'
 
